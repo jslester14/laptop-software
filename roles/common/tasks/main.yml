@@ -21,9 +21,6 @@
     # Docker
     - id: 0EBFCD88
       url: https://download.docker.com/linux/ubuntu/gpg
-    # Virtualbox
-    - id: 2980AECF
-      url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
     # # Tilix
     # - id: EEA14886
     #   url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7B2C3B0889BF5709A105D03AC2518248EEA14886
@@ -51,30 +48,12 @@
     #   repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_lsb.codename }} main
     - file: docker
       repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
-    - file: virtualbox
-      repo: deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian {{ ansible_lsb.codename }} contrib
-    - file: tilix
-      repo: ppa:webupd8team/terminix
-    - file: ukuu
-      repo: ppa:teejee2008/ppa
-    - file: openRazer
-      repo: ppa:openrazer/stable
-    - file: polychromatic
-      repo: ppa:polychromatic/stable
 
 # - name: Update Apt Cache
 #   become: yes
 #   apt:
 #     update_cache: yes
 #   when: repos is changed or keys is changed
-
-- name: Accept virtualbox ext pack license
-  become: yes
-  debconf:
-    name: virtualbox-ext-pack
-    question: virtualbox-ext-pack/license
-    value: 'true'
-    vtype: select
 
 - name: Install Apt Packages
   become: yes
@@ -91,18 +70,11 @@
     - nautilus-image-converter
     - network-manager-openvpn-gnome
     - nodejs
-    - openrazer-meta
     - openvpn-systemd-resolved
-    - polychromatic
     - python-psutil
     - python3-pip
     - snapd
-    - steam
-    - tilix
-    - ukuu
     - vim
-    - virtualbox-6.0
-    - virtualbox-ext-pack
     - zsh
 
 - name: Install awscli
@@ -119,6 +91,7 @@
   with_items:
     - slack
     - kubectl
+    - helm
 
 - name: Install snaps
   become: yes
@@ -127,9 +100,16 @@
   with_items:
     - slack
     - kubectl
+    - helm
 
 # - name: Install zoom
 #   become: yes
 #   apt:
 #     deb: https://zoom.us/client/latest/zoom_amd64.deb
   
+- name: Install terraform
+  become: yes
+  unarchive:
+    src: https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip
+    dest: /usr/local/bin
+    remote_src: yes

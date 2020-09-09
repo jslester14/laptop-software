@@ -5,14 +5,6 @@
     #   tags: hardware
     #   when: ansible_product_name == "XPS 15 9560"
 
-    - role: razer
-      tags: hardware
-      when: ansible_product_name == "Blade Stealth"
-
-    - role: razer
-      tags: hardware
-      when: ansible_product_name == "Blade"
-
     - role: hostname
       tags: hostname
 
@@ -28,8 +20,8 @@
     - role: npm
       tags: npm
 
-    - role: keyboard_shortcuts
-      tags: keyboard_shortcuts
+    # - role: keyboard_shortcuts
+    #   tags: keyboard_shortcuts
 
     - role: wallpaper
       tags: wallpaper

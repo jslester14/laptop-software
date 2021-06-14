@@ -14,8 +14,8 @@
     - role: user
       tags: user
 
-    - role: zsh_theme
-      tags: zsh_theme
+    # - role: zsh_theme
+    #   tags: zsh_theme
 
     - role: npm
       tags: npm
@@ -23,5 +23,5 @@
     # - role: keyboard_shortcuts
     #   tags: keyboard_shortcuts
 
-    - role: wallpaper
-      tags: wallpaper
+    # - role: wallpaper
+    #   tags: wallpaper

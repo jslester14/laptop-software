@@ -1,0 +1,60 @@
+---
+# tasks file for kubectl
+- name: install asdf
+  become: yes
+  become_user: "{{ user }}"
+  shell: |
+    git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.12.0
+  args:
+    creates:
+      "/home/{{ user }}/.asdf/asdf.sh"
+- name: add asdf to path
+  become: yes
+  become_user: "{{ user }}"
+  ansible.builtin.blockinfile:
+    path:  "/home/{{ user }}/.bashrc"
+    block: |
+      . "$HOME/.asdf/asdf.sh"
+      . "$HOME/.asdf/completions/asdf.bash"
+- name: Remove ansible managed block begin
+  lineinfile:
+    path: "/home/{{ user }}/.bashrc"
+    regexp: '# BEGIN ANSIBLE MANAGED BLOCK'
+    state: absent
+- name: Remove ansible managed block end
+  lineinfile:
+    path: "/home/{{ user }}/.bashrc"
+    regexp: '# END ANSIBLE MANAGED BLOCK'
+    state: absent
+- name: install kubectl
+  shell: |
+    rm kubectl
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    rm kubectl
+  args:
+    creates: /usr/local/bin/kubectl
+    # warn: false
+- name: install kubelogin
+  become: yes
+  become_user: "{{ user }}"
+  shell: |
+    source "/home/{{ user }}/.bashrc"
+    asdf plugin add kubelogin
+    asdf install kubelogin latest
+    asdf global kubelogin latest
+  args:
+    creates: "/home/{{ user }}/.asdf/shims/kubelogin"
+- name: ensure .kube dir exists
+  become: yes
+  become_user: "{{ user }}"
+  ansible.builtin.file:
+    path: "/home/{{ user }}/.kube/"
+    state: directory
+- name: add kubelogin symlink
+  become: yes
+  become_user: "{{ user }}"
+  ansible.builtin.file:
+    src: "/home/{{ user }}/.asdf/installs/kubelogin/0.0.33/bin/kubelogin"
+    dest: "/home/{{ user }}/.kube/kubelogin"
+    state: link

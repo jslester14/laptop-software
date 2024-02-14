@@ -1,0 +1,22 @@
+---
+# tasks file for nodejs
+- name: add nodejs LTS repo
+  shell: |
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+  args:
+    creates: /etc/apt/sources.list.d/nodesource.list
+    # warn: false
+- name: install nodejs LTS
+  package: 
+    name: nodejs
+    state: present
+- name: update NPM version globally
+  community.general.npm:
+    name: npm
+    state: latest
+    global: true
+- name: install pm2 module globally
+  community.general.npm:
+    name: pm2
+    state: latest
+    global: true

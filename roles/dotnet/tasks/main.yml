@@ -1,0 +1,28 @@
+---
+# tasks file for dotnet
+- name: ensure .dotnet directory
+  ansible.builtin.file:
+    path: "/home/{{ user }}/.dotnet"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    state: directory
+- name: download dotnet install script
+  become: yes
+  become_user: "{{ user }}"
+  ansible.builtin.get_url:
+    url: https://dot.net/v1/dotnet-install.sh
+    dest: "/home/{{ user }}/.dotnet/dotnet-install.sh"
+    mode: '0755'
+- name: install dotnet runtime
+  become: yes
+  become_user: "{{ user }}"
+  shell:
+    "/home/{{ user }}/.dotnet/dotnet-install.sh"
+  args:
+    creates: "/home/{{ user }}/.dotnet/dotnet"
+- name: add dotnet to path
+  become: yes
+  become_user: "{{ user }}"
+  lineinfile:
+    path: "/home/{{ user }}/.bashrc"
+    line: export PATH=/home/{{ user }}/.dotnet:$PATH

@@ -33,8 +33,8 @@
     dest: "{{ ansible_env.HOME }}/.gitconfig-github.com"
     content: |
       [user]
-      	name = Josh Lester
-      	email = jslester14@gmail.com
+      	name = "{{ user }}"
+      	email = "{{ email }}"
 
 - name: Do bad things with known_hosts
   blockinfile:
@@ -44,3 +44,13 @@
       host *
         StrictHostKeyChecking no
         UserKnownHostsFile /dev/null
+
+- name: create git configuration
+  copy:
+    dest: "/home/{{ user }}/.gitconfig"
+    content: |
+      [user]
+        name = "{{ name }}"
+        email = "{{ email }}"
+      [init]
+        defaultBranch = main

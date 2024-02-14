@@ -1,12 +1,15 @@
 ---
 - hosts: localhost
+  connection: local
+  become: yes
+  become_user: root
+  vars:
+    user: "jlester"
+    email: "jlester@velocityrisk.com"
+    name: "Josh Lester"
   roles:
-    # - role: xps_9560
-    #   tags: hardware
-    #   when: ansible_product_name == "XPS 15 9560"
-
-    - role: hostname
-      tags: hostname
+    # - role: hostname
+    #   tags: hostname
 
     - role: common
       tags: common
@@ -14,16 +17,34 @@
     - role: user
       tags: user
 
-    - role: zsh_theme
-      tags: zsh_theme
+    - role: software-base
+      tags: software-base
+
+    - role: fonts
+      tags: fonts
+
+    - role: docker
+      tags: docker
+
+    - role: nodejs
+      tags: nodejs
+
+    - role: dotnet
+      tags: dotnet
+
+    - role: kubectl
+      tags: kubectl
 
     - role: npm
       tags: npm
 
-    # - role: keyboard_shortcuts
-    #   tags: keyboard_shortcuts
+    - role: zsh
+      tags: zsh
 
-    - role: wallpaper
-      tags: wallpaper
+    # - role: npm
+    #   tags: npm
+
+    # - role: wallpaper
+    #   tags: wallpaper
       
     - command: git config --global alias.co checkout; git config --global alias.br branch; git config --global alias.ci commit; git config --global alias.st status  

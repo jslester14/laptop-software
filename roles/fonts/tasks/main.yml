@@ -1,0 +1,10 @@
+---
+# tasks file for fonts
+- name: install fonts-roboto
+  package:
+    name: fonts-roboto
+    state: present
+- name: install fonts-firacode
+  package:
+    name: fonts-firacode
+    state: present

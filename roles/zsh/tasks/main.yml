@@ -1,0 +1,92 @@
+---
+# tasks file for zsh
+- name: Install zsh Package
+  apt:
+    pkg:
+    - zsh
+
+- name: git oh-my-zsh/oh-my-zsh
+  become: yes
+  become_user: "{{ user }}"
+  git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: "/home/{{ user }}/.oh-my-zsh"
+    depth: 1
+    update: no
+  register: clone_ohmyzsh
+
+- name: Copy oh-my-zsh zshrc in place
+  become: yes
+  become_user: "{{ user }}"
+  copy:
+    src: "/home/{{ user }}/.oh-my-zsh/templates/zshrc.zsh-template"
+    dest: "/home/{{ user }}/.zshrc"
+    remote_src: True
+  when: clone_ohmyzsh is changed
+
+- name: Set ZSH variable to ~/.oh-my-zsh
+  become: yes
+  become_user: "{{ user }}"
+  lineinfile:
+    path: "/home/{{ user }}/.zshrc"
+    regexp: 'export ZSH='
+    line: "export ZSH=/home/{{ user }}/.oh-my-zsh"
+
+- name: git spaceship
+  become: yes
+  become_user: "{{ user }}"
+  git:
+    repo: https://github.com/spaceship-prompt/spaceship-prompt.git
+    dest: "/home/{{ user }}/.oh-my-zsh/custom/themes/spaceship-prompt"
+    depth: 1
+  register: clone_spaceship
+
+- name: Link spaceship theme
+  become: yes
+  become_user: "{{ user }}"
+  file:
+    state: link
+    src: "/home/{{ user }}/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme"
+    path: "/home/{{ user }}/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
+
+- name: Set spaceship zsh theme
+  become: yes
+  become_user: "{{ user }}"
+  lineinfile:
+    path: "/home/{{ user }}/.zshrc"
+    regexp: '^ZSH_THEME='
+    line: 'ZSH_THEME="spaceship"'
+
+- name: Set default shell to zsh
+  become: yes
+  user:
+    name: "{{ user }}"
+    shell: /usr/bin/zsh
+
+- name: add dotnet to path
+  become: yes
+  become_user: "{{ user }}"
+  lineinfile:
+    path: "/home/{{ user }}/.zshrc"
+    line: export PATH=/home/{{ user }}/.dotnet:$PATH
+
+- name: add asdf to path
+  become: yes
+  become_user: "{{ user }}"
+  ansible.builtin.blockinfile:
+    path:  "/home/{{ user }}/.zshrc"
+    block: |
+      . "$HOME/.asdf/asdf.sh"
+      . "$HOME/.asdf/completions/asdf.bash"
+
+- name: Remove ansible managed block begin
+  lineinfile:
+    path: "/home/{{ user }}/.zshrc"
+    regexp: '# BEGIN ANSIBLE MANAGED BLOCK'
+    state: absent
+
+- name: Remove ansible managed block end
+  lineinfile:
+    path: "/home/{{ user }}/.zshrc"
+    regexp: '# END ANSIBLE MANAGED BLOCK'
+    state: absent

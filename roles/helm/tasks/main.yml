@@ -1,0 +1,18 @@
+---
+- name: add helm apt repo key
+  shell: |
+    curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+  args:
+    creates:
+      /usr/share/keyrings/helm.gpg
+- name: add helm apt repo
+  shell: |
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+    apt update
+  args:
+    creates:
+      /etc/apt/sources.list.d/helm-stable-debian.list
+- name: install helm
+  package:
+    name: helm
+    state: latest

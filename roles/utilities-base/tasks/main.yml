@@ -1,0 +1,11 @@
+---
+# tasks file for utilities-base---
+# tasks file for software-base
+- name: install zip
+  package: 
+    name: zip
+    state: latest
+- name: install jq
+  package:
+    name: jq
+    state: latest

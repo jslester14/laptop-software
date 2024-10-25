@@ -1,0 +1,19 @@
+---
+# tasks for liquibase
+- name: add liquibase apt repo key
+  shell: |
+    curl https://repo.liquibase.com/liquibase.asc | gpg --dearmor | sudo tee /usr/share/keyrings/liquibase.gpg > /dev/null
+  args:
+    creates:
+      /usr/share/keyrings/liquibase.gpg
+- name: add liquibase apt repo
+  shell: |
+    echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/liquibase.gpg] https://repo.liquibase.com stable main' | sudo tee /etc/apt/sources.list.d/liquibase.list
+    apt update
+  args:
+    creates:
+      /etc/apt/sources.list.d/liquibase.list
+- name: install liquibase
+  package:
+    name: liquibase
+    state: latest

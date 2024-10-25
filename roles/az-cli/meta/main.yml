@@ -1,0 +1,11 @@
+galaxy_info:
+  author: Josh Lester <jlester@velocityrisk.com>
+  description: Installs the azure cli on Ubuntu.
+  company: Velocity Risk Underwriters
+  license: UNLICENSED
+  min_ansible_version: 2.1
+
+  galaxy_tags: []
+
+dependencies: 
+  - git

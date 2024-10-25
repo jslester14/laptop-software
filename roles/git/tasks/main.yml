@@ -1,0 +1,15 @@
+---
+# tasks file for git
+- name: install git
+  package:
+    name: git
+    state: present
+- name: create git configuration
+  copy:
+    dest: /home/{{ user_name }}/.gitconfig
+    content: |
+      [user]
+        name = "{{ full_name }}"
+        email = "{{ user_name }}@velocityrisk.com"
+      [init]
+        defaultBranch = main

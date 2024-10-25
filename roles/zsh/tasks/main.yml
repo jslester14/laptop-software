@@ -1,0 +1,105 @@
+---
+# tasks file for zsh
+- name: Install zsh Package
+  apt:
+    pkg:
+    - zsh
+
+- name: git oh-my-zsh/oh-my-zsh
+  git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: "/home/{{ user_name }}/.oh-my-zsh"
+    depth: 1
+    update: no
+  register: clone_ohmyzsh
+
+- name: Copy oh-my-zsh zshrc in place
+  copy:
+    src: "/home/{{ user_name }}/.oh-my-zsh/templates/zshrc.zsh-template"
+    dest: "/home/{{ user_name }}/.zshrc"
+    remote_src: True
+  when: clone_ohmyzsh is changed
+
+- name: Set ZSH variable to ~/.oh-my-zsh
+  lineinfile:
+    path: "/home/{{ user_name }}/.zshrc"
+    regexp: 'export ZSH='
+    line: "export ZSH=/home/{{ user_name }}/.oh-my-zsh"
+
+- name: git spaceship
+  git:
+    repo: https://github.com/spaceship-prompt/spaceship-prompt.git
+    dest: "/home/{{ user_name }}/.oh-my-zsh/custom/themes/spaceship-prompt"
+    depth: 1
+  register: clone_spaceship
+
+- name: Link spaceship theme
+  file:
+    state: link
+    src: "/home/{{ user_name }}/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme"
+    path: "/home/{{ user_name }}/.oh-my-zsh/custom/themes/spaceship.zsh-theme"
+
+- name: Set spaceship zsh theme
+  lineinfile:
+    path: "/home/{{ user_name }}/.zshrc"
+    regexp: '^ZSH_THEME='
+    line: 'ZSH_THEME="spaceship"'
+
+- name: Set default shell to zsh
+  user:
+    name: "{{ user_name }}"
+    shell: /usr/bin/zsh
+
+- name: Remove old plugins
+  lineinfile:
+    path: "/home/{{ user_name }}/.zshrc"
+    regexp: 'plugins*'
+    state: absent
+
+- name: add things to path
+  blockinfile:
+    path: "/home/{{ user_name }}/.zshrc"
+    block: |
+      export PATH=$PATH:$HOME/.dotnet:$HOME/.local/bin:$HOME/bin:/usr/local/bin
+      export TFE_TOKEN=""
+      export BW_CLIENTID=""
+      export BW_CLIENTSECRET=""
+      export BW_EMAIL=""
+      export BW_PASSWORD=''
+      export AZURE_DEVOPS_PAT=""
+      alias tf="terraform"
+      alias k="kubectl"
+      cd /mnt/c/Users/JLester
+      plugins=(
+        ansible
+        azure
+        copybuffer
+        copyfile
+        copypath
+        dirhistory
+        docker
+        docker-compose
+        dotnet
+        encode64
+        git
+        helm
+        history
+        kubectl
+        jsontools
+        sudo
+        terraform
+        zsh-autosuggestions
+      )
+
+- name: Remove ansible managed block begin
+  lineinfile:
+    path: "/home/{{ user_name }}/.zshrc"
+    regexp: '# BEGIN ANSIBLE MANAGED BLOCK'
+    state: absent
+
+- name: Remove ansible managed block end
+  lineinfile:
+    path: "/home/{{ user_name }}/.zshrc"
+    regexp: '# END ANSIBLE MANAGED BLOCK'
+    state: absent
+

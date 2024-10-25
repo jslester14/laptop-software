@@ -1,0 +1,5 @@
+---
+# tasks file for kubectl
+- name: install kubectl and kubelogin
+  shell: |
+    az aks install-cli

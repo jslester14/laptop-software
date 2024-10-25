@@ -1,0 +1,26 @@
+---
+# tasks file for software-base
+- name: install apt-transport-https
+  package: 
+    name: apt-transport-https
+    state: latest
+- name: install ca-certificates
+  package: 
+    name: ca-certificates
+    state: latest
+- name: install software-properties-common
+  package: 
+    name: software-properties-common
+    state: latest
+- name: install lsb-release
+  package:
+    name: lsb-release
+    state: latest
+- name: install curl
+  package:
+    name: curl 
+    state: latest
+- name: install gnupg
+  package:
+    name: gnupg
+    state: latest

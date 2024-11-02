@@ -10,35 +10,35 @@ check_command_success() {
     fi
 }
 
-# Updating apt
+# # Updating apt
 sudo apt update
 sudo apt upgrade -y
 
-# Ensure Python and pip are installed
-echo "Checking for Python and pip..."
+# # Ensure Python and pip are installed
+# echo "Checking for Python and pip..."
 
-# Install Python if not installed
-if ! command -v python3 &> /dev/null; then
-    echo "Python3 is not installed. Installing Python3..."
-    sudo apt update && sudo apt install -y python3 python3-pip || sudo yum install -y python3 python3-pip || sudo dnf install -y python3 python3-pip
-    check_command_success
-else
-    echo "Python3 is already installed."
-fi
+# # Install Python if not installed
+# if ! command -v python3 &> /dev/null; then
+#     echo "Python3 is not installed. Installing Python3..."
+#     sudo apt update && sudo apt install -y python3 python3-pip || sudo yum install -y python3 python3-pip || sudo dnf install -y python3 python3-pip
+#     check_command_success
+# else
+#     echo "Python3 is already installed."
+# fi
 
-# Ensure pip is installed
-if ! command -v pip3 &> /dev/null; then
-    echo "pip3 is not installed. Installing pip3..."
-    sudo apt install -y python3-pip || sudo yum install -y python3-pip || sudo dnf install -y python3-pip
-    check_command_success
-else
-    echo "pip3 is already installed."
-fi
+# # Ensure pip is installed
+# if ! command -v pip3 &> /dev/null; then
+#     echo "pip3 is not installed. Installing pip3..."
+#     sudo apt install -y python3-pip || sudo yum install -y python3-pip || sudo dnf install -y python3-pip
+#     check_command_success
+# else
+#     echo "pip3 is already installed."
+# fi
 
-# Upgrade pip
-echo "Upgrading pip..."
-python3 -m pip install --upgrade pip
-check_command_success
+# # # Upgrade pip
+# # echo "Upgrading pip..."
+# # python3 -m pip install --upgrade pip
+# # check_command_success
 
 # Install Ansible using pip
 echo "Installing Ansible using pip..."

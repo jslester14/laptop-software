@@ -2,9 +2,9 @@
 # tasks file for nodejs
 - name: add nodejs LTS repo
   shell: |
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+    curl -fsSL https://deb.nodesource.com/setup_26.x | bash -
   args:
-    creates: /etc/apt/sources.list.d/nodesource.list
+    creates: /etc/apt/sources.list.d/nodesource.sources
 - name: install nodejs LTS
   package: 
     name: nodejs

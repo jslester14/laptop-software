@@ -9,3 +9,12 @@
   package:
     name: jq
     state: latest
+- name: install vim
+  package:
+    name: vim
+    state: latest
+
+- name: install unzip
+  package:
+    name: unzip
+    state: latest

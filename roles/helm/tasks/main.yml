@@ -1,17 +1,19 @@
 ---
+# Helm's apt repo moved from baltocdn.com (now offline) to Buildkite.
+# The old repo files are removed in primary-wsl.yaml pre_tasks, before any apt update.
 - name: add helm apt repo key
   shell: |
-    curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+    curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor -o /usr/share/keyrings/helm-buildkite.gpg
   args:
     creates:
-      /usr/share/keyrings/helm.gpg
+      /usr/share/keyrings/helm-buildkite.gpg
 - name: add helm apt repo
   shell: |
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+    echo "deb [signed-by=/usr/share/keyrings/helm-buildkite.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | tee /etc/apt/sources.list.d/helm-buildkite.list
     apt update
   args:
     creates:
-      /etc/apt/sources.list.d/helm-stable-debian.list
+      /etc/apt/sources.list.d/helm-buildkite.list
 - name: install helm
   package:
     name: helm

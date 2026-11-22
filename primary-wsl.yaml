@@ -5,6 +5,15 @@
   become: yes
   become_user: root
   vars_files: vars.yaml
+  pre_tasks:
+    # Helm's old baltocdn.com apt repo is offline; a leftover entry breaks every apt update.
+    - name: remove old baltocdn helm repo and key
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/apt/sources.list.d/helm-stable-debian.list
+        - /usr/share/keyrings/helm.gpg
   roles:
     - utilities-base
     - git

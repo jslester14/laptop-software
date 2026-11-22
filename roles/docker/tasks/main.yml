@@ -11,9 +11,9 @@
   package: 
     name: docker-ce
     state: present
-- name: install docker-compose
+- name: install docker compose plugin
   package: 
-    name: docker-compose
+    name: docker-compose-plugin
     state: present
 - name: add user_name to docker group
   user:

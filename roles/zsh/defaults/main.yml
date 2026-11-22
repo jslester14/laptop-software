@@ -1,2 +1,21 @@
 ---
-# defaults file for fonts
+# defaults file for zsh
+zsh_plugins:
+  - ansible
+  - azure
+  - copybuffer
+  - copyfile
+  - copypath
+  - dirhistory
+  - docker
+  - docker-compose
+  - dotnet
+  - encode64
+  - git
+  - helm
+  - history
+  - kubectl
+  - jsontools
+  - sudo
+  - terraform
+  - zsh-autosuggestions

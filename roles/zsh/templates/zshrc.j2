@@ -1,0 +1,21 @@
+# {{ ansible_managed }}
+# Edits here are overwritten by the zsh role. Put secrets and machine-specific
+# settings in ~/.zshrc.local instead.
+
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="spaceship"
+
+plugins=(
+{% for plugin in zsh_plugins %}
+  {{ plugin }}
+{% endfor %}
+)
+
+source $ZSH/oh-my-zsh.sh
+
+export PATH=$PATH:$HOME/.dotnet:$HOME/.local/bin:$HOME/bin:/usr/local/bin
+
+alias tf="terraform"
+alias k="kubectl"
+
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
